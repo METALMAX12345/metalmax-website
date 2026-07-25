@@ -52,9 +52,10 @@ create policy "Public can view media"
   using (bucket_id = 'media');
 
 drop policy if exists "Authenticated can upload media" on storage.objects;
-create policy "Authenticated can upload media"
+drop policy if exists "Anyone can upload media" on storage.objects;
+create policy "Anyone can upload media"
   on storage.objects for insert
-  with check (bucket_id = 'media' and auth.role() = 'authenticated');
+  with check (bucket_id = 'media');
 
 drop policy if exists "Authenticated can update media" on storage.objects;
 create policy "Authenticated can update media"
