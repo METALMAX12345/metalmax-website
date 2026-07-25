@@ -71,6 +71,8 @@ create table if not exists public.leads (
   id bigint generated always as identity primary key,
   name text not null,
   phone text not null,
+  message text default '',
+  files jsonb default '[]'::jsonb,
   created_at timestamptz not null default now()
 );
 
