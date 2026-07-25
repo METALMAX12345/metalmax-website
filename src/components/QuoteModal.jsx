@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { X, Upload, FileText, Trash2 } from 'lucide-react'
 import { useI18n } from '../i18n'
 import { useCms } from '../data/cms'
-import { supabase, isSupabaseConfigured } from '../lib/supabaseClient'
+import { supabase, isSupabaseConfigured, MEDIA_BUCKET } from '../lib/supabaseClient'
 
 const ACCEPTED_TYPES = [
   'image/*',
@@ -84,13 +84,29 @@ export default function QuoteModal({ open, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!name.trim() || !phone.trim()) return
+
+    let fileUrls = files.map((f) => f.name)
+
+    if (isSupabaseConfigured) {
+      fileUrls = await Promise.all(
+        files.map(async (f) => {
+          const path = `leads/${Date.now()}-${f.name}`
+          const { error } = await supabase.storage.from(MEDIA_BUCKET).upload(path, f)
+          if (error) { console.error('File upload error:', error); return f.name }
+          const { data: { publicUrl } } = supabase.storage.from(MEDIA_BUCKET).getPublicUrl(path)
+          return publicUrl
+        })
+      )
+    }
+
     const lead = {
       name: name.trim(),
       phone: phone.trim(),
       message: message.trim(),
-      files: files.map((f) => f.name),
+      files: fileUrls,
       created_at: new Date().toISOString(),
     }
+
     if (isSupabaseConfigured) {
       await supabase.from('leads').insert(lead)
     } else {

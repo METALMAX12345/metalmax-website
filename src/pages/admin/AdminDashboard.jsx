@@ -599,7 +599,14 @@ export default function AdminDashboard() {
                           <td className="py-2.5 pr-4 text-steel-200">{lead.phone}</td>
                           <td className="py-2.5 pr-4 text-steel-300 max-w-[200px] truncate">{lead.message || '—'}</td>
                           <td className="py-2.5 pr-4 text-steel-400 text-[12px]">
-                            {lead.files?.length > 0 ? lead.files.join(', ') : '—'}
+                            {lead.files?.length > 0
+                              ? lead.files.map((f, fi) => {
+                                  const isUrl = f.startsWith('http://') || f.startsWith('https://')
+                                  return isUrl
+                                    ? <a key={fi} href={f} target="_blank" rel="noreferrer" className="text-red-400 hover:text-red-300 underline mr-2 whitespace-nowrap">{f.split('/').pop()}</a>
+                                    : <span key={fi} className="mr-2 whitespace-nowrap">{f}</span>
+                                })
+                              : '—'}
                           </td>
                           <td className="py-2.5 pr-4 text-steel-400 whitespace-nowrap">
                             {new Date(lead.created_at).toLocaleDateString(lang === 'en' ? 'en' : lang === 'ru' ? 'ru' : 'uk', {
