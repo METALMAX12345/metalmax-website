@@ -27,6 +27,8 @@ export default function QuoteModal({ open, onClose }) {
   const [message, setMessage] = useState('')
   const [files, setFiles] = useState([])
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [uploadError, setUploadError] = useState('')
   const [isAnimating, setIsAnimating] = useState(false)
   const [shouldRender, setShouldRender] = useState(false)
 
@@ -50,6 +52,8 @@ export default function QuoteModal({ open, onClose }) {
     setMessage('')
     setFiles([])
     setSubmitted(false)
+    setSubmitting(false)
+    setUploadError('')
     onClose()
   }, [onClose])
 
@@ -84,15 +88,20 @@ export default function QuoteModal({ open, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!name.trim() || !phone.trim()) return
+    if (submitting) return
+
+    setSubmitting(true)
+    setUploadError('')
 
     let fileUrls = files.map((f) => f.name)
+    let hasFailedUploads = false
 
     if (isSupabaseConfigured) {
       fileUrls = await Promise.all(
         files.map(async (f) => {
           const path = `leads/${Date.now()}-${f.name}`
           const { error } = await supabase.storage.from(MEDIA_BUCKET).upload(path, f)
-          if (error) { console.error('File upload error:', error); return f.name }
+          if (error) { console.error('File upload error:', error); hasFailedUploads = true; return f.name }
           const { data: { publicUrl } } = supabase.storage.from(MEDIA_BUCKET).getPublicUrl(path)
           return publicUrl
         })
@@ -108,13 +117,17 @@ export default function QuoteModal({ open, onClose }) {
     }
 
     if (isSupabaseConfigured) {
-      await supabase.from('leads').insert(lead)
+      const { error } = await supabase.from('leads').insert(lead)
+      if (error) { setSubmitting(false); setUploadError(error.message); return }
     } else {
       const existing = JSON.parse(localStorage.getItem('metalmax_leads') || '[]')
       lead.id = Date.now()
       existing.unshift(lead)
       localStorage.setItem('metalmax_leads', JSON.stringify(existing))
     }
+
+    if (hasFailedUploads) setUploadError('Деякі файли не вдалося завантажити. Заявка створена.')
+    setSubmitting(false)
     setSubmitted(true)
   }
 
@@ -213,11 +226,15 @@ export default function QuoteModal({ open, onClose }) {
                 </div>
               )}
 
+              {uploadError && (
+                <p className="text-[12px] text-red-400">{uploadError}</p>
+              )}
               <button
                 type="submit"
-                className="btn-red px-6 py-3.5 rounded-md bg-red-600 hover:bg-red-500 text-white text-[13px] font-semibold uppercase tracking-wide transition-all duration-200 shadow-red-glow mt-2"
+                disabled={submitting}
+                className="btn-red px-6 py-3.5 rounded-md bg-red-600 hover:bg-red-500 disabled:opacity-60 text-white text-[13px] font-semibold uppercase tracking-wide transition-all duration-200 shadow-red-glow mt-2"
               >
-                {lang === 'uk' ? c.submit : t.contacts.submit}
+                {submitting ? (lang === 'uk' ? 'Відправлення…' : 'Sending…') : (lang === 'uk' ? c.submit : t.contacts.submit)}
               </button>
             </form>
           </>

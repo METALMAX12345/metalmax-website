@@ -4,7 +4,7 @@ import { LogOut, Save, RotateCcw, ExternalLink, Check, Cloud, CloudOff, RefreshC
 import { useCms } from '../../data/cms'
 import { useAdminAuth } from '../../lib/useAdminAuth'
 import { useI18n } from '../../i18n'
-import { supabase, isSupabaseConfigured } from '../../lib/supabaseClient'
+import { supabase, isSupabaseConfigured, MEDIA_BUCKET } from '../../lib/supabaseClient'
 import ListEditor from '../../components/admin/ListEditor'
 
 const TABS = [
@@ -48,12 +48,24 @@ export default function AdminDashboard() {
   const [savedFlash, setSavedFlash] = useState(false)
   const [leads, setLeads] = useState([])
   const [leadsLoading, setLeadsLoading] = useState(false)
+  const [storageFiles, setStorageFiles] = useState({})
 
   const loadLeads = useCallback(async () => {
     setLeadsLoading(true)
     if (isSupabaseConfigured) {
       const { data, error } = await supabase.from('leads').select('*').order('created_at', { ascending: false })
       if (!error) setLeads(data ?? [])
+
+      const fileMap = {}
+      const { data: fileList } = await supabase.storage.from(MEDIA_BUCKET).list('leads')
+      if (fileList) {
+        for (const item of fileList) {
+          const { data: { publicUrl } } = supabase.storage.from(MEDIA_BUCKET).getPublicUrl(`leads/${item.name}`)
+          const fileName = item.name.includes('-') ? item.name.substring(item.name.indexOf('-') + 1) : item.name
+          if (!fileMap[fileName]) fileMap[fileName] = publicUrl
+        }
+      }
+      setStorageFiles(fileMap)
     } else {
       try { setLeads(JSON.parse(localStorage.getItem('metalmax_leads') || '[]')) } catch { setLeads([]) }
     }
@@ -602,9 +614,11 @@ export default function AdminDashboard() {
                             {lead.files?.length > 0
                               ? lead.files.map((f, fi) => {
                                   const isUrl = f.startsWith('http://') || f.startsWith('https://')
-                                  return isUrl
-                                    ? <a key={fi} href={f} target="_blank" rel="noreferrer" className="text-red-400 hover:text-red-300 underline mr-2 whitespace-nowrap">{f.split('/').pop()}</a>
-                                    : <span key={fi} className="mr-2 whitespace-nowrap">{f}</span>
+                                  const storageUrl = storageFiles[f]
+                                  const href = isUrl ? f : storageUrl || null
+                                  return href
+                                    ? <a key={fi} href={href} target="_blank" rel="noreferrer" className={`underline mr-2 whitespace-nowrap ${href ? 'text-red-400 hover:text-red-300' : 'text-steel-500 cursor-not-allowed'}`}>{f.split('/').pop()}</a>
+                                    : <span key={fi} className="mr-2 whitespace-nowrap text-steel-500">{f}</span>
                                 })
                               : '—'}
                           </td>
