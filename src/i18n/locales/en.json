@@ -1,0 +1,101 @@
+{
+  "nav": { "home": "Home", "services": "Services", "equipment": "Equipment", "portfolio": "Portfolio", "about": "About", "news": "News", "contacts": "Contacts", "faq": "FAQ", "cta": "Get a quote" },
+  "hero": {
+    "eyebrow": "Full-cycle metalworking",
+    "title1": "PRECISION.",
+    "title2": "POWER.",
+    "title3": "RELIABILITY.",
+    "subtitle": "Modern equipment, an experienced team, and flawless quality on every part.",
+    "cta1": "Our services",
+    "cta2": "Get a quote"
+  },
+  "features": {
+    "f1t": "High precision", "f1s": "down to 0.01 mm",
+    "f2t": "Quality guarantee", "f2s": "on all work",
+    "f3t": "On-time delivery", "f3s": "from 1 day",
+    "f4t": "Modern equipment", "f4s": "world-class level"
+  },
+  "services": {
+    "eyebrow": "What we do", "title": "Our services", "viewAll": "View all services",
+    "items": [
+      { "title": "Laser cutting", "desc": "High-precision CNC laser cutting of sheet metal up to 50 mm thick." },
+      { "title": "Sheet bending", "desc": "CNC press-brake bending of sheet metal of any complexity." },
+      { "title": "Welding", "desc": "Welding of metal structures of any complexity. MIG, TIG, MMA." },
+      { "title": "Metal structures", "desc": "Fabrication of metal structures per drawings and specification." },
+      { "title": "Powder coating", "desc": "Quality powder coating in any RAL catalogue colour." },
+      { "title": "CNC machining", "desc": "CNC milling and turning of parts." }
+    ]
+  },
+  "equipment": {
+    "eyebrow": "What we work with", "title": "Our equipment", "viewAll": "View all equipment",
+    "items": [
+      { "title": "Laser machine Bystronic ByStar Fiber 4020", "specs": ["Power: 12000 W", "Work area: 4000×2000 mm"] },
+      { "title": "Press brake Bystronic Xpert 250/4100", "specs": ["Force: 250 tons", "Bend length: 4100 mm"] },
+      { "title": "CNC plasma cutter Hypertherm XPR 300", "specs": ["Cut thickness: up to 50 mm", "Work area: 6000×2000 mm"] },
+      { "title": "Machining centre DMG MORI CMX 1100 V", "specs": ["Travel: 1100×560×510 mm", "Speed: up to 12000 rpm"] },
+      { "title": "CNC lathe HAAS ST-30", "specs": ["Max diameter: 432 mm", "Max length: 826 mm"] },
+      { "title": "Laser machine Bystronic ByStar Fiber 3015", "specs": ["Power: 6000 W", "Work area: 3000×1500 mm"] }
+    ]
+  },
+  "portfolio": {
+    "eyebrow": "Our work", "title": "Portfolio", "viewAll": "View all work",
+    "filters": ["All", "Metal structures", "Enclosures", "Decorative elements", "Industrial equipment"],
+    "items": [
+      { "title": "Metal staircase", "cat": "Metal structures" },
+      { "title": "Decorative panel", "cat": "Decorative elements" },
+      { "title": "Building frame", "cat": "Metal structures" },
+      { "title": "Equipment enclosure", "cat": "Enclosures" },
+      { "title": "Industrial gears", "cat": "Industrial equipment" },
+      { "title": "Steel truss", "cat": "Industrial equipment" }
+    ]
+  },
+  "about": {
+    "eyebrow": "Who we are", "title": "About the company",
+    "text": "METALMAX is a modern full-cycle metalworking company. We combine professional experience, advanced technology, and modern equipment to handle tasks of any complexity. Our goal is long-term partnership and a flawless result for every client.",
+    "cta": "More about the company",
+    "stats": [
+      { "n": "10+", "l": "years of experience" },
+      { "n": "2500+", "l": "completed projects" },
+      { "n": "50+", "l": "pieces of equipment" },
+      { "n": "98%", "l": "satisfied clients" }
+    ]
+  },
+  "testimonials": {
+    "eyebrow": "Reviews", "title": "What our clients say",
+    "items": [
+      { "text": "We've worked with METALMAX for years now. Consistently high quality, precise deadlines, and a professional approach to every project.", "name": "Andriy K.", "role": "Director, TechnoProm" },
+      { "text": "We ordered a batch of metal structures for a warehouse — everything was made quickly, exactly to the drawings, no complaints.", "name": "Maryna S.", "role": "Procurement Lead, BudGroup" },
+      { "text": "Very happy with the laser cutting and powder coating quality. We recommend them as a reliable partner.", "name": "Ihor P.", "role": "Owner, SteelDesign" }
+    ]
+  },
+  "faq": {
+    "eyebrow": "Questions", "title": "Frequently asked questions",
+    "items": [
+      { "q": "Which materials do you work with?", "a": "We process mild steel, stainless steel, aluminium, copper, and brass from 0.5 to 50 mm thick depending on the technology." },
+      { "q": "What's the maximum cutting thickness?", "a": "Up to 30 mm on laser equipment, up to 50 mm on plasma, depending on the metal type." },
+      { "q": "How long does an order take?", "a": "It depends on complexity and volume — from 1 business day for simple parts to several weeks for large projects." },
+      { "q": "Can you deliver finished parts?", "a": "Yes, we arrange delivery across Ukraine via our own transport or partner carriers." },
+      { "q": "Can you provide a quote from drawings?", "a": "Yes, send drawings in DXF, DWG, or PDF and we'll prepare a quote within 1 hour." }
+    ]
+  },
+  "contacts": {
+    "eyebrow": "Get in touch", "title": "Contacts",
+    "phones": "Phones", "email": "Email", "address": "Address", "hours": "Working hours", "social": "Messengers",
+    "addressValue": "Ukraine, Kyiv, Promyslova St. 15",
+    "hoursValue": "Mon–Fri: 08:00–18:00, Sat: 09:00–14:00",
+    "formTitle": "Leave a request — we will call you back",
+    "formSub": "Leave your phone number and we will contact you within 15 minutes",
+    "namePh": "Your name", "phonePh": "Phone", "submit": "Request a call",
+    "thanks": "Thank you! Your request has been received — we'll contact you shortly."
+  },
+  "footer": {
+    "desc": "Modern fabrication of metal structures and parts of any complexity.",
+    "company": "Company", "companyLinks": ["About the company", "Our advantages", "Certificates", "Careers", "News"],
+    "servicesTitle": "Services", "helpTitle": "Help", "helpLinks": ["FAQ", "Delivery & payment", "Quality guarantee", "Privacy policy"],
+    "newsletterTitle": "Newsletter", "newsletterSub": "Stay up to date with news and special offers.", "emailPh": "Your e-mail",
+    "socialTitle": "Follow us",
+    "rights": "All rights reserved.", "privacy": "Privacy policy"
+  },
+  "leads": { "title": "Leads", "empty": "No leads yet", "name": "Name", "phone": "Phone", "date": "Date", "delete": "Delete", "deleted": "Deleted", "deleteConfirm": "Delete lead from" },
+  "admin": { "title": "Admin panel" }
+}
