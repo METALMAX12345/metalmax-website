@@ -42,7 +42,7 @@ function SyncBadge({ status }) {
 
 export default function AdminDashboard() {
   const { authed, logout } = useAdminAuth()
-  const { content, update, reset, syncStatus } = useCms()
+  const { content, update, reset, syncStatus, save } = useCms()
   const { t, lang } = useI18n()
   const [tab, setTab] = useState('hero')
   const [savedFlash, setSavedFlash] = useState(false)
@@ -111,6 +111,9 @@ export default function AdminDashboard() {
             <a href="/" target="_blank" rel="noreferrer" className="flex items-center gap-1.5 px-3 py-2 rounded-md text-[12.5px] text-steel-300 hover:text-white transition-colors">
               <ExternalLink size={14} /> На сайт
             </a>
+            <button onClick={save} className="flex items-center gap-1.5 px-3 py-2 rounded-md bg-red-600 hover:bg-red-500 text-[12.5px] text-white transition-colors">
+              <Save size={14} /> Зберегти
+            </button>
             <button onClick={() => { reset(); flashSaved() }} className="flex items-center gap-1.5 px-3 py-2 rounded-md text-[12.5px] text-steel-300 hover:text-white transition-colors">
               <RotateCcw size={14} /> Скинути
             </button>

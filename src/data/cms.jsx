@@ -218,7 +218,6 @@ export function CmsProvider({ children }) {
   const [content, setContent] = useState(loadLocal)
   const [syncStatus, setSyncStatus] = useState(isSupabaseConfigured ? 'connecting' : 'local')
   const lastSyncedJson = useRef(null)
-  const saveTimer = useRef(null)
   const initialFetchDone = useRef(false)
 
   // Initial fetch + realtime subscription (runs once).
@@ -275,37 +274,12 @@ export function CmsProvider({ children }) {
     return () => {
       cancelled = true
       if (channel) supabase.removeChannel(channel)
-      if (saveTimer.current) clearTimeout(saveTimer.current)
     }
   }, [])
 
-  // Always cache locally (instant, offline-friendly). Push to Supabase, debounced,
-  // only once the initial fetch has resolved and only if content actually changed
-  // relative to what we last synced (avoids echoing realtime updates back out).
+  // Always cache locally (instant, offline-friendly).
   useEffect(() => {
     persistLocal(content)
-
-    if (!isSupabaseConfigured || !initialFetchDone.current) return
-
-    const json = JSON.stringify(content)
-    if (json === lastSyncedJson.current) return
-
-    setSyncStatus('saving')
-    if (saveTimer.current) clearTimeout(saveTimer.current)
-    saveTimer.current = setTimeout(async () => {
-      const { error } = await supabase
-        .from(CONTENT_TABLE)
-        .upsert({ id: CONTENT_ROW_ID, content, updated_at: new Date().toISOString() })
-      if (error) {
-        console.error('Supabase: failed to save site_content', error)
-        setSyncStatus('error')
-      } else {
-        lastSyncedJson.current = json
-        setSyncStatus('synced')
-      }
-    }, 800)
-
-    return () => clearTimeout(saveTimer.current)
   }, [content])
 
   const update = useCallback((path, value) => {
@@ -320,8 +294,24 @@ export function CmsProvider({ children }) {
 
   const reset = useCallback(() => setContent(defaultContent()), [])
 
+  const save = useCallback(async () => {
+    if (!isSupabaseConfigured || !initialFetchDone.current) return
+    setSyncStatus('saving')
+    const json = JSON.stringify(content)
+    const { error } = await supabase
+      .from(CONTENT_TABLE)
+      .upsert({ id: CONTENT_ROW_ID, content, updated_at: new Date().toISOString() })
+    if (error) {
+      console.error('Supabase: failed to save site_content', error)
+      setSyncStatus('error')
+    } else {
+      lastSyncedJson.current = json
+      setSyncStatus('synced')
+    }
+  }, [content])
+
   return (
-    <CmsContext.Provider value={{ content, update, reset, setContent, syncStatus }}>
+    <CmsContext.Provider value={{ content, update, reset, setContent, syncStatus, save }}>
       {children}
     </CmsContext.Provider>
   )
